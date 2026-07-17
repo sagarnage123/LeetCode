@@ -1,10 +1,14 @@
+int freq[50001];
+long long gcdArray[50001]={0};
 class Solution {
 public:
     vector<int> gcdValues(vector<int>& nums, vector<long long>& queries) {
 
         int maxi=*max_element(nums.begin(),nums.end());
-        vector<int> freq(maxi+1,0);
-        vector<long long> gcd(maxi+1,0);
+        // vector<int> freq(maxi+1,0);
+        // vector<long long> gcd(maxi+1,0);
+        memset(freq,0,sizeof(freq));
+        memset(gcdArray,0,sizeof(gcdArray));
         for(auto num:nums)
         freq[num]++;
         
@@ -15,19 +19,19 @@ public:
             for(int j=i;j<=maxi;j+=i)
             {
                 tot+=freq[j];
-                totgcd+=gcd[j];
+                totgcd+=gcdArray[j];
 
             }
             
-            gcd[i]=tot*(tot-1)/2;
-            gcd[i]-=totgcd;
+            gcdArray[i]=tot*(tot-1)/2;
+            gcdArray[i]-=totgcd;
         }
         for(int i=1;i<=maxi;i++)
-        gcd[i]+=gcd[i-1];
+        gcdArray[i]+=gcdArray[i-1];
 
         vector<int> ans(queries.size());
         for(int i=0;i<queries.size();i++)
-        ans[i]=upper_bound(gcd.begin(),gcd.end(),queries[i])-gcd.begin();
+        ans[i]=upper_bound(gcdArray,gcdArray+maxi,queries[i])-gcdArray;
 
         return ans;
     }

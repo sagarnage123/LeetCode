@@ -2,13 +2,12 @@ class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
 
-        unordered_map<int,int>hash;
         
         int mask=0,ans=0;
+        unordered_set<int> hash;
         for(int i=31;i>=0;i--)
         {
             mask=mask|(1<<i);
-            unordered_set<int> hash;
             for(auto num:nums)
             {
                 hash.insert(num&mask);
@@ -22,6 +21,7 @@ public:
                     break;
                 }
             }
+            hash.clear();
         }
         return ans;
         

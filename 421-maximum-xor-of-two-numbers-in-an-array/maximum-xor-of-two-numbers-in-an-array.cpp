@@ -8,13 +8,13 @@ public:
         for(int i=31;i>=0;i--)
         {
             mask=mask|(1<<i);
-            unordered_map<int,int> hash;
+            unordered_set<int> hash;
             for(auto num:nums)
             {
-                hash[num&mask]=1;
+                hash.insert(num&mask);
             }
             int temp=ans|(1<<i);
-            for(auto [key,val]:hash)
+            for(auto key:hash)
             {
                 if(hash.count(temp^key))
                 {

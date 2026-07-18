@@ -1,31 +1,74 @@
+struct Node{
+
+    Node* links[2];
+    Node()
+    {
+        this->links[0]=this->links[1]=NULL;
+    }
+
+};
+class Trie{
+    Node *root;
+    public:
+    Trie()
+    {
+        root=new Node();
+    }
+
+    void add(int num)
+    {
+        Node* mover=root;
+        for(int i=31;i>=0;i--)
+        {
+            int bit=(num>>i)&1;
+            if(!mover->links[bit])
+            {
+                mover->links[bit]=new Node();
+            }
+            
+            
+            mover=mover->links[bit];
+        }
+        
+    }
+    int query(int num)
+    {
+        int ans=0;
+        Node* mover=root;
+        for(int i=31;i>=0 ;i--)
+        {
+            int bit=(num>>i)&1;
+            
+            if(mover->links[!bit])
+            {
+                ans=ans|(1<<i);
+                mover=mover->links[!bit];
+                
+            }
+            else 
+            {
+                mover=mover->links[bit];
+            }
+              
+        }
+        
+        
+        return ans;
+    }
+
+};
 class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
 
-        int maxi=*max_element(nums.begin(),nums.end());
-        if(maxi==0)
-        return 0;
-        int n=31- __builtin_clz(maxi);
-        int mask=0,ans=0;
-        unordered_set<int> hash;
-        for(int i=n;i>=0;i--)
-        {
-            mask=mask|(1<<i);
-            for(auto num:nums)
-            {
-                hash.insert(num&mask);
-            }
-            int temp=ans|(1<<i);
-            for(auto key:hash)
-            {
-                if(hash.count(temp^key))
-                {
-                    ans=temp;
-                    break;
-                }
-            }
-            hash.clear();
-        }
+        Trie tr;
+        for(auto num:nums)
+        tr.add(num);
+
+        int ans=0;
+        for(auto num:nums)
+        ans=max(ans,tr.query(num));
+
         return ans;
         
     }

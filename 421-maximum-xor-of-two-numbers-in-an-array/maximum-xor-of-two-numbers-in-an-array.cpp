@@ -2,10 +2,13 @@ class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
 
-        
+        int maxi=*max_element(nums.begin(),nums.end());
+        if(maxi==0)
+        return 0;
+        int n=31- __builtin_clz(maxi);
         int mask=0,ans=0;
         unordered_set<int> hash;
-        for(int i=31;i>=0;i--)
+        for(int i=n;i>=0;i--)
         {
             mask=mask|(1<<i);
             for(auto num:nums)
